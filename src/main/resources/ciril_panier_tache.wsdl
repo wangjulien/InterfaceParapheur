@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="PanierTache"
+ targetNamespace="Ciril:Ciril:PanierTache"
+ xmlns:tns="Ciril:Ciril:PanierTache"
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:ciril-panier-tache="Ciril:Ciril:PanierTache"
+ xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+ xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+ xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+ xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<wsdl:types>
+
+ <xsd:schema targetNamespace="Ciril:Ciril:PanierTache"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ciril-panier-tache="Ciril:Ciril:PanierTache"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="unqualified"
+  attributeFormDefault="unqualified">
+  <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+  <xsd:complexType name="Documents">
+   <xsd:sequence>
+     <xsd:element name="nomDoc" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="nomFic" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="urlDoc" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArrayOfDocuments">
+   <xsd:complexContent>
+    <xsd:restriction base="SOAP-ENC:Array">
+     <xsd:sequence>
+      <xsd:element name="item" type="ciril-panier-tache:Documents" minOccurs="0" maxOccurs="unbounded"/>
+     </xsd:sequence>
+     <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ciril-panier-tache:Documents[]"/>
+    </xsd:restriction>
+   </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Details">
+   <xsd:sequence>
+     <xsd:element name="datdeb" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="heudeb" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="numTache" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <xsd:element name="libtachedetail" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="url" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="documents" type="ciril-panier-tache:ArrayOfDocuments" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="codAtt" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="valeursPossible" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="typeValeur" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArrayOfDetails">
+   <xsd:complexContent>
+    <xsd:restriction base="SOAP-ENC:Array">
+     <xsd:sequence>
+      <xsd:element name="item" type="ciril-panier-tache:Details" minOccurs="0" maxOccurs="unbounded"/>
+     </xsd:sequence>
+     <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ciril-panier-tache:Details[]"/>
+    </xsd:restriction>
+   </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Taches">
+   <xsd:sequence>
+     <xsd:element name="application" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="libpro" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="libtache" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="nbtache" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <xsd:element name="details" type="ciril-panier-tache:ArrayOfDetails" minOccurs="1" maxOccurs="1" nillable="false"/>
+   </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArrayOfTaches">
+   <xsd:complexContent>
+    <xsd:restriction base="SOAP-ENC:Array">
+     <xsd:sequence>
+      <xsd:element name="item" type="ciril-panier-tache:Taches" minOccurs="0" maxOccurs="unbounded"/>
+     </xsd:sequence>
+     <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ciril-panier-tache:Taches[]"/>
+    </xsd:restriction>
+   </xsd:complexContent>
+  </xsd:complexType>
+ </xsd:schema>
+
+</wsdl:types>
+
+<wsdl:message name="getTachesRequest">
+ <wsdl:part name="acces" type="xsd:string"/>
+</wsdl:message>
+
+<wsdl:message name="getTachesResponse">
+ <wsdl:part name="param-1" type="ciril-panier-tache:ArrayOfTaches"/>
+</wsdl:message>
+
+<wsdl:message name="setActionTachesRequest">
+ <wsdl:part name="acces" type="xsd:string"/>
+ <wsdl:part name="numTache" type="xsd:int"/>
+ <wsdl:part name="codAtt" type="xsd:string"/>
+ <wsdl:part name="valAtt" type="xsd:string"/>
+</wsdl:message>
+
+<wsdl:message name="setActionTachesResponse">
+ <wsdl:part name="reponse" type="xsd:string"/>
+</wsdl:message>
+
+<wsdl:portType name="PanierTache">
+ <wsdl:operation name="getTaches">
+  <wsdl:documentation>Service definition of function ciril_panier_tache__getTaches</wsdl:documentation>
+  <wsdl:input message="tns:getTachesRequest"/>
+  <wsdl:output message="tns:getTachesResponse"/>
+ </wsdl:operation>
+ <wsdl:operation name="setActionTaches">
+  <wsdl:documentation>Service definition of function ciril_panier_tache__setActionTaches</wsdl:documentation>
+  <wsdl:input message="tns:setActionTachesRequest"/>
+  <wsdl:output message="tns:setActionTachesResponse"/>
+ </wsdl:operation>
+</wsdl:portType>
+
+<wsdl:binding name="PanierTache" type="tns:PanierTache">
+ <SOAP:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+ <wsdl:operation name="getTaches">
+  <SOAP:operation style="rpc" soapAction="Ciril:Ciril:ServicesCiril#getTaches"/>
+  <wsdl:input>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:PanierTache" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:input>
+  <wsdl:output>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:PanierTache" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:output>
+ </wsdl:operation>
+ <wsdl:operation name="setActionTaches">
+  <SOAP:operation style="rpc" soapAction="Ciril:Ciril:ServicesCiril#setActionTaches"/>
+  <wsdl:input>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:PanierTache" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:input>
+  <wsdl:output>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:PanierTache" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:output>
+ </wsdl:operation>
+</wsdl:binding>
+
+<wsdl:service name="PanierTache">
+ <wsdl:documentation>Panier des taches de l'utilisateur</wsdl:documentation>
+ <wsdl:port name="PanierTache" binding="tns:PanierTache">
+  <SOAP:address location="http://127.0.0.1/cgi-bin/ws.exe/cgi-bin/ciril_panier_tache.exe?ws"/>
+ </wsdl:port>
+</wsdl:service>
+
+</wsdl:definitions>

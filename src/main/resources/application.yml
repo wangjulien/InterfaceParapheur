@@ -1,0 +1,45 @@
+client :
+  civil-login: gpseo
+  civil-password: a_definir
+  civil-uri: https://gpseoprod.ciril.net/cgi-bin/ws.exe/cgi-bin/acces.exe?ws
+  civil-tache-uri: https://gpseoprod.ciril.net/cgi-bin/ws.exe/cgi-bin/ciril_panier_tache.exe?ws
+  call-rate: 0 0/1 * 1/1 * ?
+
+meta-parapheur:
+  servlet-url: https://localhost:8443/cdmsserveur/startElasticXML
+
+---
+
+server:
+  port: 8444
+  servlet:
+    context-path: /metaparapheur
+  tomcat:
+    basedir: ./ip_logs
+    accesslog:
+      enabled: true
+  ssl:
+    key-alias: tomcat
+    key-store: classpath:keystore.p12
+    key-store-password: telino_2018
+    key-store-type: PKCS12
+spring:
+  datasource:
+    password: pocgpse123!
+    url: jdbc:postgresql://172.19.33.34:5432/poc_gpseo
+    username: pocgpse
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: false
+  jta:
+    enabled: true
+    log-dir: ./log/jta
+    transaction-manager-id: jtp-iparapheur

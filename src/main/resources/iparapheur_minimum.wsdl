@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:sch="http://www.adullact.org/spring-ws/iparapheur/1.0"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.adullact.org/spring-ws/iparapheur/1.0"
+	targetNamespace="http://www.adullact.org/spring-ws/iparapheur/1.0">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns:iph="http://www.adullact.org/spring-ws/iparapheur/1.0"
+			xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+			attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://www.adullact.org/spring-ws/iparapheur/1.0">
+			<xsd:import namespace="http://www.w3.org/2005/05/xmlmime"
+				schemaLocation="http://www.w3.org/2005/05/xmlmime" />
+
+			<xsd:annotation>
+				<xsd:documentation>
+					Contrat Web-Services pour i-Parapheur, version 4.3 (juin 2015).
+				</xsd:documentation>
+			</xsd:annotation>
+
+			<!-- -->
+			<!-- Web Service : Creation d'un dossier -->
+			<!-- -->
+
+			<xsd:element name="CreerDossierRequest">
+				<xsd:annotation>
+					<xsd:documentation>Création d'un dossier.
+						MetaData: permet de caractériser le dossier avec des propriétés
+						supplémentaires définies dans le dictionnaire de méta-données.
+						MetaDataTdTACTES: ne sert que pour les dossiers à télétransmettre
+						sur plateforme ACTES par WebServices.
+						CircuitObligatoire: a eviter, utiliser de preference le routage parametre par
+						TypeTechnique/SousType.
+						NomDocPrincipal: optionnel, a fournir si different du nom du dossier DossierID.
+						DossierTitre: optionnel, permet de donner un titre dossier lisible
+						different du dossierID (reference interne).
+						Ajout v4.3: balise DocumentsSupplementaires pour le support des
+						dossiers multi documents principaux.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:all>
+						<xsd:element name="TypeTechnique"
+							type="iph:TypeTechnique" />
+						<xsd:element name="SousType" type="iph:SousType" />
+						<xsd:element name="EmailEmetteur" maxOccurs="1"
+							minOccurs="0" type="xsd:string" />
+						<xsd:element name="DossierID" type="iph:DossierID" />
+						<xsd:element name="DocumentPrincipal"
+							type="iph:TypeDoc"
+							xmime:expectedContentTypes="application/pdf, application/xml, text/xml, text/plain, application/rtf, application/vnd.oasis.opendocument.text, application/vnd.oasis.opendocument.spreadsheet, application/vnd.oasis.opendocument.presentation, application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, image/jpeg, image/png, image/gif" />
+						<!-- Présent mais toujours vide -->
+						<xsd:element name="DocumentsAnnexes" maxOccurs="1"
+							minOccurs="0" type="xsd:string" />
+						<!-- Présent mais toujours vide -->
+						<xsd:element name="VisuelPDF" nillable="true"
+							type="iph:TypeDoc" xmime:expectedContentTypes="application/pdf" />
+						<!-- Présent mais toujours vide -->
+						<xsd:element name="MetaDataTdtACTES" nillable="true"
+							type="iph:metaDataTdtACTES" />
+						<!-- Présent mais toujours vide -->
+						<xsd:element name="XPathPourSignatureXML"
+							nillable="true" type="xsd:string" />
+						<xsd:element name="AnnotationPublique" nillable="true"
+							type="xsd:string" />
+						<xsd:element name="AnnotationPrivee" nillable="true"
+							type="xsd:string" />
+						<xsd:element name="Visibilite" type="iph:Visibilite" />
+						<xsd:element name="DateLimite" nillable="true"
+							type="iph:date_AAAA-MM-JJ" />
+					</xsd:all>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="CreerDossierResponse">
+				<xsd:annotation>
+					<xsd:documentation>Réponse à la création d'un nouveau dossier. En
+						v3.4, un élément DossierID si et seulement si la balise
+						DossierTitre est valorisée dans la requete.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="MessageRetour" type="iph:MessageRetour" />
+						<!-- DossierTitre n'étant pas utilisé, cette balise n'est jamais présente -->
+						<xsd:element maxOccurs="1" minOccurs="0"
+							name="DossierID" type="iph:DossierID" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:complexType name="metaDataTdtACTES">
+				<xsd:annotation>
+					<xsd:documentation>Donnees necessaires pour la teletransmission des
+						ACTES au controle de legalite. Le numero d'ACTE ne fait pas partie
+						des parametres, c'est dossierID.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="nature" type="xsd:string" />
+					<xsd:element name="classification" type="xsd:string" />
+					<xsd:element name="date" type="xsd:string" />
+					<xsd:element name="objet" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- -->
+			<!-- TYPES définis pour les WebServices -->
+			<!-- -->
+
+			<xsd:complexType name="TypeDoc">
+				<xsd:simpleContent>
+					<xsd:restriction base="xmime:base64Binary">
+						<xsd:attribute ref="xmime:contentType"
+							use="required" />
+					</xsd:restriction>
+				</xsd:simpleContent>
+			</xsd:complexType>
+
+			<xsd:simpleType name="date_AAAA-MM-JJ">
+				<xsd:restriction base="xsd:string">
+					<xsd:whiteSpace value="collapse" />
+					<xsd:pattern
+						value="[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="DossierID">
+				<xsd:annotation>
+					<xsd:documentation>Un nom de dossier n'a pratiquement pas de limite
+						de longueur dans Alfresco. Cependant, cela peut nuire à
+						l'affichage, d'où une longueur limite applicative à 600.
+						ATTENTION: sur caractères interdits par Alfresco: \ &amp; " £ * /
+						&lt; &gt; ? % | + ; : </xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern
+						value="\w([\w@\.\(\)\{\}\-_éèêàùçëïü]){0,600}" />
+					<xsd:whiteSpace value="collapse" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="TypeTechnique">
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern
+						value="([A-Za-z])([A-Za-z0-9]|[:blank:]){0,31}" />
+					<xsd:whiteSpace value="collapse" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="SousType">
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern
+						value="([A-Za-z])([A-Za-z0-9]|[:blank:]){0,63}" />
+					<xsd:whiteSpace value="collapse" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="Visibilite">
+				<xsd:restriction base="xsd:string">
+					<xsd:whiteSpace value="collapse" />
+					<xsd:enumeration value="PUBLIC" />
+					<xsd:enumeration value="SERVICE" />
+					<xsd:enumeration value="CONFIDENTIEL" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="codeRetour">
+				<xsd:restriction base="xsd:string">
+					<xsd:whiteSpace value="collapse" />
+					<xsd:enumeration value="" />
+					<xsd:enumeration value="OK" />
+					<xsd:enumeration value="KO" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="MessageRetour">
+				<xsd:sequence>
+					<xsd:element name="codeRetour" type="iph:codeRetour" />
+					<xsd:element name="message" type="xsd:string" />
+					<xsd:element name="severite" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="CreerDossierResponse">
+		<wsdl:part element="tns:CreerDossierResponse"
+			name="CreerDossierResponse" />
+	</wsdl:message>
+
+	<wsdl:message name="CreerDossierRequest">
+		<wsdl:part element="tns:CreerDossierRequest"
+			name="CreerDossierRequest" />
+	</wsdl:message>
+
+	<wsdl:portType name="InterfaceParapheur">
+		<wsdl:operation name="CreerDossier">
+			<wsdl:input message="tns:CreerDossierRequest"
+				name="CreerDossierRequest" />
+			<wsdl:output message="tns:CreerDossierResponse"
+				name="CreerDossierResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="InterfaceParapheurSoap11"
+		type="tns:InterfaceParapheur">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="CreerDossier">
+			<soap:operation soapAction="" />
+			<wsdl:input name="CreerDossierRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CreerDossierResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="InterfaceParapheurService">
+		<wsdl:port binding="tns:InterfaceParapheurSoap11"
+			name="InterfaceParapheurSoap11">
+			<soap:address
+				location="http://localhost:8080/ws-iparapheur" />
+		</wsdl:port>
+	</wsdl:service>
+	
+</wsdl:definitions>

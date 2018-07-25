@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="AccessInfo"
+ targetNamespace="Ciril:Ciril:AccessInfo"
+ xmlns:tns="Ciril:Ciril:AccessInfo"
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:acces="Ciril:Ciril:AccessInfo"
+ xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+ xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+ xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+ xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<wsdl:types>
+
+ <xsd:schema targetNamespace="Ciril:Ciril:AccessInfo"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:acces="Ciril:Ciril:AccessInfo"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="unqualified"
+  attributeFormDefault="unqualified">
+  <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+  <xsd:complexType name="AccessPoint">
+   <xsd:sequence>
+     <xsd:element name="client" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="database" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="application" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="netApplication" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="schema" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="user" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="userOrigin" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="URL" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="target" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="group" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="label" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="groupImage" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="versionCheck" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <xsd:element name="typlan" type="xsd:byte" minOccurs="1" maxOccurs="1"/>
+   </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArrayOfAccessPoint">
+   <xsd:complexContent>
+    <xsd:restriction base="SOAP-ENC:Array">
+     <xsd:sequence>
+      <xsd:element name="item" type="acces:AccessPoint" minOccurs="0" maxOccurs="unbounded"/>
+     </xsd:sequence>
+     <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="acces:AccessPoint[]"/>
+    </xsd:restriction>
+   </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="SubAccessPoint">
+   <xsd:sequence>
+     <xsd:element name="code" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="title" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <xsd:element name="URL" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ArrayOfSubAccessPoint">
+   <xsd:complexContent>
+    <xsd:restriction base="SOAP-ENC:Array">
+     <xsd:sequence>
+      <xsd:element name="item" type="acces:SubAccessPoint" minOccurs="0" maxOccurs="unbounded"/>
+     </xsd:sequence>
+     <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="acces:SubAccessPoint[]"/>
+    </xsd:restriction>
+   </xsd:complexContent>
+  </xsd:complexType>
+ </xsd:schema>
+
+</wsdl:types>
+
+<wsdl:message name="getAccessListRequest">
+ <wsdl:part name="param-1" type="xsd:string"/>
+ <wsdl:part name="param-2" type="xsd:string"/>
+ <wsdl:part name="param-3" type="xsd:string"/>
+ <wsdl:part name="param-4" type="xsd:string"/>
+</wsdl:message>
+
+<wsdl:message name="getAccessListResponse">
+ <wsdl:part name="param-5" type="acces:ArrayOfAccessPoint"/>
+</wsdl:message>
+
+<wsdl:message name="getSubAccessListRequest">
+ <wsdl:part name="param-6" type="xsd:string"/>
+ <wsdl:part name="param-7" type="xsd:string"/>
+</wsdl:message>
+
+<wsdl:message name="getSubAccessListResponse">
+ <wsdl:part name="param-8" type="acces:ArrayOfSubAccessPoint"/>
+</wsdl:message>
+
+<wsdl:portType name="AccessInfo">
+ <wsdl:operation name="getAccessList">
+  <wsdl:documentation>Service definition of function acces__getAccessList</wsdl:documentation>
+  <wsdl:input message="tns:getAccessListRequest"/>
+  <wsdl:output message="tns:getAccessListResponse"/>
+ </wsdl:operation>
+ <wsdl:operation name="getSubAccessList">
+  <wsdl:documentation>Service definition of function acces__getSubAccessList</wsdl:documentation>
+  <wsdl:input message="tns:getSubAccessListRequest"/>
+  <wsdl:output message="tns:getSubAccessListResponse"/>
+ </wsdl:operation>
+</wsdl:portType>
+
+<wsdl:binding name="AccessInfo" type="tns:AccessInfo">
+ <SOAP:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+ <wsdl:operation name="getAccessList">
+  <SOAP:operation style="rpc" soapAction="Ciril:Ciril:AccessInfo#getAccessList"/>
+  <wsdl:input>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:AccessInfo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:input>
+  <wsdl:output>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:AccessInfo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:output>
+ </wsdl:operation>
+ <wsdl:operation name="getSubAccessList">
+  <SOAP:operation style="rpc" soapAction="Ciril:Ciril:AccessInfo#getSubAccessList"/>
+  <wsdl:input>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:AccessInfo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:input>
+  <wsdl:output>
+     <SOAP:body use="encoded" namespace="Ciril:Ciril:AccessInfo" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </wsdl:output>
+ </wsdl:operation>
+</wsdl:binding>
+
+<wsdl:service name="AccessInfo">
+ <wsdl:documentation>acces disponibles pour un utilisateur</wsdl:documentation>
+ <wsdl:port name="AccessInfo" binding="tns:AccessInfo">
+  <SOAP:address location="http://127.0.0.1/cgi-bin/ws.exe/cgi-bin/acces.exe?ws"/>
+ </wsdl:port>
+</wsdl:service>
+
+</wsdl:definitions>
